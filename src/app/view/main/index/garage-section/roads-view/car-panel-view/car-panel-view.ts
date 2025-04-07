@@ -1,8 +1,5 @@
 import "./car-panel-view.css";
-import {
-    BaseComponent,
-    IBaseComponentParam,
-} from "../../../../../../../util/base-component";
+import { IBaseComponentParam } from "../../../../../../../util/base-component";
 import { View } from "../../../../../view";
 import { Service } from "../../../../../../service/service";
 import { CarPanelControllerView } from "./panel-controller/panel-controller";

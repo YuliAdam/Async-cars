@@ -3,7 +3,6 @@ import { ButtonComponent } from "../../../../../../../../../util/components/butt
 import { ICarParam } from "../../../../../../../../service/garage-service/garage-service";
 import { Service } from "../../../../../../../../service/service";
 import { IndexView } from "../../../../../index-view";
-import { GarageView } from "../../../../garage-view";
 import { CarPanelView } from "../../car-panel-view";
 
 const CssClasses: { remove: string[] } = {

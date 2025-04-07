@@ -5,7 +5,6 @@ import { InputComponent } from "../../../../../../../util/components/input-compo
 import { UpdateFormChildren } from "./form-update-children/form-update-children";
 import { Service } from "../../../../../../service/service";
 import { ICarParam } from "../../../../../../service/garage-service/garage-service";
-import { GarageView } from "../../../garage-section/garage-view";
 import { CarPanelView } from "../../../garage-section/roads-view/car-panel-view/car-panel-view";
 
 const CssClasses: { updateForm: string[] } = {

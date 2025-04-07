@@ -3,7 +3,6 @@ import {
     IEngineStartStop,
 } from "../app/service/engine-service/engine-service";
 import {
-    ICarParam,
     ICreateCarParams,
     IGetGarageParams,
 } from "../app/service/garage-service/garage-service";

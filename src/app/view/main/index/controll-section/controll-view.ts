@@ -1,8 +1,5 @@
 import "./controll-view.css";
-import {
-    BaseComponent,
-    IBaseComponentParam,
-} from "../../../../../util/base-component";
+import { IBaseComponentParam } from "../../../../../util/base-component";
 import { View } from "../../../view";
 import { UpdateGarageView } from "./update-garage-view/update-garage-view";
 import { RaceResetView } from "./race-reset-view/race-reset-view";

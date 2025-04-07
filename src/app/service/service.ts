@@ -1,8 +1,5 @@
 import { EngineService } from "./engine-service/engine-service";
-import {
-    GarageService,
-    ICreateCarParams,
-} from "./garage-service/garage-service";
+import { GarageService } from "./garage-service/garage-service";
 import { WinnersService } from "./winners-service/winners-service";
 
 const DOMAIN_NAME: string = "http://127.0.0.1:3000";

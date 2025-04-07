@@ -35,6 +35,7 @@ export class CarMoveControllerView extends View {
             this.startButton,
             this.stopButton,
         ]);
+        console.log(service, car);
     }
     private createStartButtonComponent(
         service: Service,
@@ -74,11 +75,14 @@ export class CarMoveControllerView extends View {
         }
         this.startButton.addClassIfHasNot("opacity");
         this.stopButton.removeClass("opacity");
+        console.log(service);
     }
 
     public addStopEvent(service: Service, car: Car) {
         car.removeClass("driveMood");
         this.startButton.removeClass("opacity");
         this.stopButton.addClassIfHasNot("opacity");
+
+        console.log(service);
     }
 }

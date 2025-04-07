@@ -6,14 +6,8 @@ import {
 import { Service } from "../../../../service/service";
 import { View } from "../../../view";
 import { WinnersHeaderView } from "../header/winners-header";
-import {
-    ICreateWinnerParams,
-    IWinnersParams,
-} from "../../../../service/winners-service/winners-service";
-import {
-    ICarParam,
-    ICreateCarParams,
-} from "../../../../service/garage-service/garage-service";
+import { ICreateWinnerParams } from "../../../../service/winners-service/winners-service";
+import { ICarParam } from "../../../../service/garage-service/garage-service";
 import { Car } from "../../index/garage-section/roads-view/car-panel-view/car-move-view/car-move-children/car";
 
 const CssClasses: { table: string[]; car: string } = {

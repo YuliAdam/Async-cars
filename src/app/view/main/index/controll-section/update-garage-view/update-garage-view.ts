@@ -1,8 +1,5 @@
 import "./update-garage-view.css";
-import {
-    BaseComponent,
-    IBaseComponentParam,
-} from "../../../../../../util/base-component";
+import { IBaseComponentParam } from "../../../../../../util/base-component";
 import { View } from "../../../../view";
 import { CreateFormView } from "./form-creare/form-create";
 import { FormComponent } from "../../../../../../util/components/form-component";
