@@ -1,0 +1,41 @@
+.create_name {
+    margin: 5px;
+}
+
+.create_color {
+    margin: 5px;
+    border-radius: var(--border-radius-btn);
+}
+
+.create_button {
+    margin: 5px;
+    background: var(--yellow);
+    padding: 0.5em 0.5em;
+    transition: 0.25s;
+    cursor: pointer;
+    font-family: var(--title-font);
+    font-size: 1.5vw;
+    color: var(--text-color);
+    margin: 5px;
+    border-color: transparent;
+    border-radius: var(--border-radius-btn);
+    transition: all 0.25s ease-in;
+}
+
+.create_button:hover {
+    box-shadow: var(--box-shadow-yellow);
+}
+
+@media screen and (min-width: 1280px) {
+
+    .create_button {
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width: 900px) {
+
+    .create_button {
+        font-size: 13.5px;
+    }
+}

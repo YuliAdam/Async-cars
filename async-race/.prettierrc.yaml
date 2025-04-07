@@ -1,0 +1,9 @@
+printWidth: 80
+tabWidth: .nan
+useTabs: false
+semi: true
+singleQuote: true
+trailingComma: none
+bracketSpacing: true
+jsxBracketSameLine: false
+arrowParens: avoid

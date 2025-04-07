@@ -1,0 +1,41 @@
+.update_name {
+    margin: 5px;
+}
+
+.update_color {
+    margin: 5px;
+    border-radius: var(--border-radius-btn);
+}
+
+.update_button {
+    margin: 5px;
+    background: var(--yellow);
+    padding: 0.5em 0.5em;
+    transition: 0.25s;
+    cursor: pointer;
+    font-family: var(--title-font);
+    font-size: 1.5vw;
+    color: var(--text-color);
+    margin: 5px;
+    border-color: transparent;
+    border-radius: var(--border-radius-btn);
+    transition: all 0.25s ease-in;
+}
+
+.update_button:hover {
+    box-shadow: var(--box-shadow-yellow);
+}
+
+@media screen and (min-width: 1280px) {
+
+    .update_button {
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width: 900px) {
+
+    .update_button {
+        font-size: 13.5px;
+    }
+}

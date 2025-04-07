@@ -1,0 +1,13 @@
+.footer{
+    font-family: var(--title-font);
+    font-size: 0.7em;
+    color: var(--text-color-black);
+    line-height: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.footer_title{
+    margin: 0;
+}

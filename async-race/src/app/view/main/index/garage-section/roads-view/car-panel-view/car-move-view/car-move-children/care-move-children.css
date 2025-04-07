@@ -1,0 +1,79 @@
+.controller_car {
+    display: flex;
+    align-items: end;
+    position: absolute;
+    bottom: -8px;
+    left: 100px;
+}
+
+.driveMood{
+    animation-name: drive;
+    animation-fill-mode: forwards;
+}
+
+.controller_car_svg {
+    width: 9vw;
+    height: auto;
+}
+
+.controller_finish {
+    width: 50px;
+    height: auto;
+    margin: 0 30px;
+}
+
+.car-move_controller {
+    display: flex;
+}
+
+.controller_start,
+.controller_stop {
+    background: var(--yellow);
+    transition: 0.25s;
+    cursor: pointer;
+    font-family: var(--title-font);
+    font-size: 1.5vw;
+    color: var(--text-color);
+    margin: 1px 5px;
+    border-color: transparent;
+    border-radius: var(--border-radius-btn);
+    transition: all 0.25s ease-in;
+}
+
+.controller_start:hover,
+.controller_stop:hover {
+    box-shadow: var(--box-shadow-yellow);
+}
+
+@media screen and (min-width: 1280px) {
+
+    .controller_start,
+    .controller_stop {
+        font-size: 1.2em;
+    }
+
+    .controller_car_svg {
+        width: 115.2px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+
+    .controller_start,
+    .controller_stop {
+        font-size: 13.5px;
+    }
+
+    .controller_car_svg {
+        width: 80px;
+    }
+}
+
+@keyframes drive {
+    0% {
+        left: 100px;
+    }
+    100% {
+        left: calc(100% - 100px);
+    }
+}

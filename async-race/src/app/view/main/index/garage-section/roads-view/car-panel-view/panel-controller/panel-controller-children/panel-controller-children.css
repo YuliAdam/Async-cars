@@ -1,0 +1,44 @@
+.controller_select,
+.controller_remove {
+    background: var(--yellow);
+    transition: 0.25s;
+    cursor: pointer;
+    font-family: var(--title-font);
+    font-size: 1.5vw;
+    color: var(--text-color);
+    margin: 0 5px;
+    border-color: transparent;
+    border-radius: var(--border-radius-btn);
+    transition: all 0.25s ease-in;
+}
+
+.controller_select:hover,
+.controller_remove:hover {
+    box-shadow: var(--box-shadow-yellow);
+}
+
+.controller_car-name {
+   color: var(--yellow);
+    font-family: var(--title-font);
+    font-size: 1.5vw;
+    margin: 0;
+    font-weight: 400;
+}
+
+@media screen and (min-width: 1280px) {
+
+    .controller_select,
+    .controller_remove,
+    .controller_car-name {
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width: 900px) {
+
+    .controller_select,
+    .controller_remove,
+    .controller_car-name {
+        font-size: 13.5px;
+    }
+}

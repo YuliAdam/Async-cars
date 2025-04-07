@@ -1,0 +1,45 @@
+.garage_pagination {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.pagination_prev,
+.pagination_next {
+    background: var(--yellow);
+    padding: 0.5em 0.5em;
+    transition: 0.25s;
+    cursor: pointer;
+    font-family: var(--title-font);
+    font-size: 1.5vw;
+    color: var(--text-color);
+    margin: 5px;
+    border-color: transparent;
+    border-radius: var(--border-radius-btn);
+    transition: all 0.25s ease-in;
+}
+
+.relativ-div {
+    position: relative;
+}
+
+.pagination_prev:hover,
+.pagination_next:hover {
+    box-shadow: var(--box-shadow-yellow);
+}
+
+@media screen and (min-width: 1280px) {
+
+    .pagination_prev,
+    .pagination_next {
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width: 900px) {
+
+    .pagination_prev,
+    .pagination_next {
+        font-size: 13.5px;
+    }
+}

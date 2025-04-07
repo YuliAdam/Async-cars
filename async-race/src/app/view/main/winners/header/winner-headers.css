@@ -1,0 +1,32 @@
+.winners_header {
+    width: 80%;
+    margin: auto;
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header_wins-count,
+.header_wins-page {
+    color: var(--yellow);
+    font-family: var(--title-font);
+    font-size: 1.5vw;
+    margin: 0;
+    font-weight: 400;
+}
+
+@media screen and (min-width: 1280px) {
+
+    .header_wins-count,
+    .header_wins-page {
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width: 900px) {
+
+    .header_wins-count,
+    .header_wins-page {
+        font-size: 13.5px;
+    }
+}

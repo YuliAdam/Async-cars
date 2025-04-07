@@ -1,0 +1,42 @@
+{
+    "name": "async-race",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "prettier": "prettier --single-quote --use-tabs --trailing-comma es5 --write \"src/**/*.ts\"",
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "lint": "lint",
+        "prepare": "husky"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.23.0",
+        "@typescript-eslint/parser": "^8.28.0",
+        "eslint": "^9.23.0",
+        "eslint-plugin-unicorn": "^58.0.0",
+        "globals": "^16.0.0",
+        "husky": "^9.1.7",
+        "lint-staged": "^15.5.0",
+        "prettier": "3.5.3",
+        "tslint-config-prettier": "^1.18.0",
+        "typescript": "~5.7.2",
+        "typescript-eslint": "^8.28.0",
+        "vite": "^6.2.0"
+    },
+    "main": "index.js",
+    "dependencies": {
+        "@commitlint/cli": "^19.8.0",
+        "@commitlint/config-conventional": "^19.8.0",
+        "esbuild": "^0.25.1",
+        "nanoid": "^3.3.11",
+        "picocolors": "^1.1.1",
+        "postcss": "^8.5.3",
+        "rollup": "^4.37.0",
+        "source-map-js": "^1.2.1"
+    },
+    "author": "",
+    "license": "ISC",
+    "description": ""
+}

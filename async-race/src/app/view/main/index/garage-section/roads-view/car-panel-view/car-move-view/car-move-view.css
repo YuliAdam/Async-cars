@@ -1,0 +1,5 @@
+.car-panel_car-move{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}

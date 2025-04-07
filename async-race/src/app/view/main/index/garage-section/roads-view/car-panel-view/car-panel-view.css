@@ -1,0 +1,6 @@
+.roads_car-panel {
+    width: 100%;
+    border-color: transparent;
+    border-bottom: var(--border-road);
+    border-style: dashed;
+}

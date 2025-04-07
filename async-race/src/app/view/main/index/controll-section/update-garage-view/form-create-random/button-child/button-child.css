@@ -1,0 +1,31 @@
+.create_random {
+    background: var(--yellow);
+    padding: 0.5em 0.5em;
+    transition: 0.25s;
+    cursor: pointer;
+    font-family: var(--title-font);
+    font-size: 1.5vw;
+    color: var(--text-color);
+    margin: 5px;
+    border-color: transparent;
+    border-radius: var(--border-radius-btn);
+    transition: all 0.25s ease-in;
+}
+
+.create_random:hover {
+    box-shadow: var(--box-shadow-yellow);
+}
+
+@media screen and (min-width: 1280px) {
+
+    .create_random {
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width: 900px) {
+
+    .create_random {
+        font-size: 13.5px;
+    }
+}

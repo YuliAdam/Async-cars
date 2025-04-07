@@ -1,0 +1,55 @@
+.winners_table {
+    width: 80%;
+    margin: auto;
+    background-color: var(--grey);
+    border-collapse: collapse;
+
+}
+
+.winners_table tr {
+    width: 100%;
+}
+
+.winners_table thead {
+    background-color: var(--yellow);
+}
+
+.winners_table th {
+    color: var(--primary-color-black);
+}
+
+.winners_table td {
+    color: var(--yellow);
+}
+
+.winners_table td,
+.winners_table th {
+    border: 1px var(--primary-color-light) solid;
+    border-collapse: collapse;
+
+    font-family: var(--title-font);
+    font-size: 1.5vw;
+    margin: 0;
+    font-weight: 400;
+    text-align: center;
+}
+
+@media screen and (min-width: 1280px) {
+
+    .winners_table th,
+    .winners_table td {
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width: 900px) {
+
+    .winners_table th,
+    .winners_table td {
+        font-size: 13.5px;
+    }
+}
+.table_car{
+    width: 100%;
+    height: auto;
+}
