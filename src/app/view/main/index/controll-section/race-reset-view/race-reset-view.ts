@@ -13,22 +13,24 @@ const CssClasses: { raceResetWrap: string[] } = {
 
 export class RaceResetView extends View {
     private dialogComponent: DialogView;
+    public childComponents: RaceResetChildren;
     constructor(service: Service, garageSection: GarageView) {
         const raceResetParam: IBaseComponentParam = {
             classList: CssClasses.raceResetWrap,
         };
         super(raceResetParam);
         this.dialogComponent = this.createDialog();
-        this.configView(service, garageSection);
+        this.childComponents = this.createChildrenComponents(
+            service,
+            garageSection,
+            this.dialogComponent
+        );
+        this.configView();
     }
 
-    private configView(service: Service, garageSection: GarageView) {
+    private configView() {
         this.viewComponent.appendChildComponents([
-            ...this.createChildrenComponents(
-                service,
-                garageSection,
-                this.dialogComponent
-            ),
+            ...this.childComponents.childArray,
             this.dialogComponent.viewComponent,
         ]);
     }
@@ -37,9 +39,8 @@ export class RaceResetView extends View {
         service: Service,
         garageSection: GarageView,
         dialogComponent: DialogView
-    ): ButtonComponent[] {
-        return new RaceResetChildren(service, garageSection, dialogComponent)
-            .childArray;
+    ): RaceResetChildren {
+        return new RaceResetChildren(service, garageSection, dialogComponent);
     }
 
     private createDialog() {

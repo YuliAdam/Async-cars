@@ -67,6 +67,7 @@ export class GarageRoadView extends View {
         indexView: IndexView
     ): Promise<BaseComponent[]> {
         const childArr: BaseComponent[] = [];
+        this.carPanelViewArr = [];
         this.carsParams = await this.getCarsParams(service, page);
         const count: number = this.carsParams.length;
         for (let i = 0; i < count; i++) {

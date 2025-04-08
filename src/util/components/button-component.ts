@@ -9,4 +9,11 @@ export class ButtonComponent extends BaseComponent {
         };
         super(param);
     }
+
+    public doDisabled() {
+        this.setComponentAttribute("disabled", "true");
+    }
+    public removeDisabled() {
+        this.removeComponentAttribute("disabled");
+    }
 }

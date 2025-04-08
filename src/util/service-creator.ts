@@ -7,7 +7,7 @@ import {
     IGetGarageParams,
 } from "../app/service/garage-service/garage-service";
 import {
-    ICreateWinnerParams,
+    IResponseWinnerParams,
     IUpdateWinnerParams,
     IWinnersParams,
 } from "../app/service/winners-service/winners-service";
@@ -57,7 +57,7 @@ export class ServiceCreator {
     protected stringifyBody(
         params:
             | ICreateCarParams
-            | ICreateWinnerParams
+            | IResponseWinnerParams
             | IUpdateWinnerParams
             | IEngineStartStop
             | IEngineDriveRequest
@@ -91,7 +91,7 @@ export class ServiceCreator {
     }
 
     protected async createRequest(
-        params: ICreateCarParams | ICreateWinnerParams,
+        params: ICreateCarParams | IResponseWinnerParams,
         errorMessage: string
     ) {
         const method: string = "POST";
@@ -114,7 +114,7 @@ export class ServiceCreator {
             .catch((e) => this.createErrorMessage(e, errorMessage));
     }
     protected async updateRequest(
-        params: ICreateCarParams | ICreateWinnerParams | IUpdateWinnerParams,
+        params: ICreateCarParams | IResponseWinnerParams | IUpdateWinnerParams,
         id: number,
         errorMessage: string
     ) {

@@ -6,7 +6,7 @@ import {
 import { Service } from "../../../../service/service";
 import { View } from "../../../view";
 import { WinnersHeaderView } from "../header/winners-header";
-import { ICreateWinnerParams } from "../../../../service/winners-service/winners-service";
+import { IResponseWinnerParams } from "../../../../service/winners-service/winners-service";
 import { ICarParam } from "../../../../service/garage-service/garage-service";
 import { Car } from "../../index/garage-section/roads-view/car-panel-view/car-move-view/car-move-children/car";
 
@@ -57,7 +57,7 @@ export class WinnersTableView extends View {
         service: Service,
         headerComponent: WinnersHeaderView
     ): Promise<BaseComponent> {
-        const winnersParam: ICreateWinnerParams[] = await this.getWinners(
+        const winnersParam: IResponseWinnerParams[] = await this.getWinners(
             service,
             headerComponent
         );
@@ -75,7 +75,7 @@ export class WinnersTableView extends View {
     private async getWinners(
         service: Service,
         headerComponent: WinnersHeaderView
-    ): Promise<ICreateWinnerParams[]> {
+    ): Promise<IResponseWinnerParams[]> {
         const page = headerComponent.pageNumber;
         return await service.winnersService.getWinners({
             _page: page,
@@ -85,7 +85,7 @@ export class WinnersTableView extends View {
 
     private async getRowWithData(
         service: Service,
-        winsParams: ICreateWinnerParams,
+        winsParams: IResponseWinnerParams,
         rowNum: number
     ): Promise<BaseComponent[]> {
         const carParams: ICarParam = await this.getCarParams(

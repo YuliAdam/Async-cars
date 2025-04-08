@@ -153,6 +153,7 @@ export class PaginationView extends View {
                 newPageNumber,
                 indexView
             );
+            this.activateAllButtons(indexView);
         }
     }
 
@@ -182,6 +183,7 @@ export class PaginationView extends View {
                 newPageNumber,
                 indexView
             );
+            this.activateAllButtons(indexView);
         }
     }
 
@@ -217,5 +219,14 @@ export class PaginationView extends View {
             (await service.garageService.getGarageTotalCount()) ?? ""
         );
         return page * CARS_LIMIT < service.garageService.carsNumber;
+    }
+
+    private activateAllButtons(indexView: IndexView) {
+        indexView.controllSection.raceResetView.childComponents.raceButton.removeDisabled();
+        indexView.controllSection.raceResetView.childComponents.resetButton.removeDisabled();
+        indexView.garageSection.garageRoad.carPanelViewArr.forEach((el) => {
+            el.moveComponent.carController.startButton.removeDisabled();
+            el.moveComponent.carController.stopButton.removeDisabled();
+        });
     }
 }

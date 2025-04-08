@@ -1,8 +1,5 @@
 import "./button-children.css";
-import {
-    BaseComponent,
-    IBaseComponentParam,
-} from "../../../../../../../util/base-component";
+import { IBaseComponentParam } from "../../../../../../../util/base-component";
 import { ComponentChildren } from "../../../../../../../util/child-component-array";
 import { ButtonComponent } from "../../../../../../../util/components/button-component";
 import { Service } from "../../../../../../service/service";
@@ -14,6 +11,8 @@ import {
 } from "../../../../../../service/engine-service/engine-service";
 import { DialogView } from "../dialog-view/dialog-view";
 import { ICarParam } from "../../../../../../service/garage-service/garage-service";
+import { Car } from "../../../garage-section/roads-view/car-panel-view/car-move-view/car-move-children/car";
+import { ICreateWinnerParams } from "../../../../../../service/winners-service/winners-service";
 
 const CssClasses: { race: string[]; reset: string[] } = {
     race: ["controll_race"],
@@ -26,8 +25,8 @@ const buttonText: { RACE: string; RESET: string } = {
 };
 
 export class RaceResetChildren extends ComponentChildren<ButtonComponent> {
-    public raceButton: BaseComponent;
-    public resetButton: BaseComponent;
+    public raceButton: ButtonComponent;
+    public resetButton: ButtonComponent;
     constructor(
         service: Service,
         garageSection: GarageView,
@@ -80,14 +79,15 @@ export class RaceResetChildren extends ComponentChildren<ButtonComponent> {
         dialogComponent: DialogView
     ) {
         const params: IEngineStartStop[] = [];
+        const timesArray: { id: number; time: number }[] = [];
+        this.raceButton.doDisabled();
+        this.resetButton.doDisabled();
         garageSection.garageRoad.carsParams.forEach((p) => {
             params.push({ id: p.id, status: ICarState.started });
         });
         const driveParams = await service.engineService.setStateAll(params);
-        this.raceButton.setComponentAttribute("disabled", "true");
-        const timesArray: { id: number; time: number }[] = [];
         garageSection.garageRoad.carPanelViewArr.forEach(async (panel, i) => {
-            const car = panel.moveComponent.car;
+            const car: Car = panel.moveComponent.car;
             await garageSection.garageRoad.carPanelViewArr[
                 i
             ].moveComponent.carController.addStopEvent(service, car);
@@ -97,33 +97,32 @@ export class RaceResetChildren extends ComponentChildren<ButtonComponent> {
                 time = promise.distance / promise.velocity;
                 timesArray.push({ id: car.carParams.id, time: time / 1000 });
             }
-            const carElement: HTMLElement | null = car.getElement();
-            if (carElement) {
-                carElement.style.animationDuration = `${time}ms`;
-            }
+            car.setAnimationDuration(time);
             car.addClassIfHasNot("driveMood");
             garageSection.garageRoad.carPanelViewArr[
                 i
-            ].moveComponent.carController.startButton.setComponentAttribute(
-                "disabled",
-                "true"
-            );
+            ].moveComponent.carController.startButton.doDisabled();
             garageSection.garageRoad.carPanelViewArr[
                 i
-            ].moveComponent.carController.stopButton.removeComponentAttribute(
-                "disabled"
-            );
-            const driveResponse: IEngineDriveRespons =
-                await service.engineService.drive(car.carParams.id);
-            if (!driveResponse.success && carElement) {
-                carElement.style.animationPlayState = "paused";
-                timesArray.pop();
-            }
+            ].moveComponent.carController.stopButton.removeDisabled();
+            this.doDriveRequest(service, car, timesArray);
         });
-        setTimeout(
-            async () => this.showWinner(timesArray, service, dialogComponent),
-            200
-        );
+        setTimeout(async () => {
+            this.showWinner(timesArray, service, dialogComponent);
+        }, 200);
+    }
+
+    private async doDriveRequest(
+        service: Service,
+        car: Car,
+        timesArray: { id: number; time: number }[]
+    ) {
+        const driveResponse: IEngineDriveRespons =
+            await service.engineService.drive(car.carParams.id);
+        if (!driveResponse.success) {
+            car.setAnimationPlayState("paused");
+            timesArray.pop();
+        }
     }
 
     private async showWinner(
@@ -131,12 +130,17 @@ export class RaceResetChildren extends ComponentChildren<ButtonComponent> {
         service: Service,
         dialogComponent: DialogView
     ) {
-        console.log(timesArray);
         const winnerResult = await this.getWinnerResult(timesArray, service);
-        console.log(winnerResult);
+        this.addResultInWinnersTable(service, {
+            id: winnerResult.winnerParams.id,
+            time: winnerResult.time,
+        });
         setTimeout(
-            () => this.openDialog(winnerResult, dialogComponent),
-            timesArray[timesArray.length - 1].time * 1000
+            () => {
+                this.openDialog(winnerResult, dialogComponent);
+                this.resetButton.removeDisabled();
+            },
+            timesArray[timesArray.length - 1].time * 100 + 200
         );
     }
 
@@ -163,7 +167,6 @@ export class RaceResetChildren extends ComponentChildren<ButtonComponent> {
             winnerParams.winnerParams.name,
             winnerParams.time
         );
-        console.log(dialogComponent);
         dialogComponent.showDialog();
     }
 
@@ -173,22 +176,21 @@ export class RaceResetChildren extends ComponentChildren<ButtonComponent> {
             params.push({ id: p.id, status: ICarState.stopped });
         });
         await service.engineService.setStateAll(params);
-        this.raceButton.removeComponentAttribute("disabled");
+        this.raceButton.removeDisabled();
         garageSection.garageRoad.carPanelViewArr.forEach((panel, i) => {
             const car = panel.moveComponent.car;
             car.removeClass("driveMood");
             garageSection.garageRoad.carPanelViewArr[
                 i
-            ].moveComponent.carController.startButton.removeClass("opacity");
-            garageSection.garageRoad.carPanelViewArr[
-                i
-            ].moveComponent.carController.startButton.removeComponentAttribute(
-                "disabled"
-            );
-            const carElement: HTMLElement | null = car.getElement();
-            if (carElement) {
-                carElement.style.animationPlayState = "running";
-            }
+            ].moveComponent.carController.startButton.removeDisabled();
+            car.setAnimationPlayState("running");
         });
+    }
+
+    public async addResultInWinnersTable(
+        service: Service,
+        params: ICreateWinnerParams
+    ) {
+        await service.winnersService.createWinner(params);
     }
 }

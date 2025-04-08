@@ -108,4 +108,5 @@ export class CarMoveControllerView extends View {
             }
         }
     }
+
 }

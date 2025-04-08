@@ -15,9 +15,13 @@ export interface IWinnersParams {
     _sort?: ISortOption;
     _order?: IOrderOption;
 }
-export interface ICreateWinnerParams {
+export interface IResponseWinnerParams {
     id: number;
     wins: number;
+    time: number;
+}
+export interface ICreateWinnerParams {
+    id: number;
     time: number;
 }
 
@@ -34,9 +38,9 @@ export class WinnersService extends ServiceCreator {
         this.setAllWinnersId();
     }
 
-    public async setAllWinnersId() {
+    private async setAllWinnersId() {
         const errorMessage: string = "Imposible get winners";
-        const data: Promise<ICreateWinnerParams[]> = await fetch(this.url)
+        const data: Promise<IResponseWinnerParams[]> = await fetch(this.url)
             .then((response) => response.json())
             .catch((e) => this.createErrorMessage(e, errorMessage));
         const dataArr = await data;
@@ -65,15 +69,20 @@ export class WinnersService extends ServiceCreator {
         const errorMessage: string = "Fail winner creation";
         if (!this.winnersId.includes(params.id)) {
             this.winnersId.push(params.id);
-            return await this.createRequest(params, errorMessage);
+            const newWinnerParams: IResponseWinnerParams = {
+                id: params.id,
+                wins: 1,
+                time: parseFloat(params.time.toFixed(1)),
+            };
+            return await this.createRequest(newWinnerParams, errorMessage);
         } else {
             const winnerParams = await this.getWinner(params.id);
             const newWinsNum: number = winnerParams.wins + 1;
             let time: number = winnerParams.time;
-            if (time < params.time) {
+            if (time > params.time) {
                 time = params.time;
             }
-            const newParams: ICreateWinnerParams = {
+            const newParams: IResponseWinnerParams = {
                 id: params.id,
                 time: time,
                 wins: newWinsNum,
@@ -90,16 +99,16 @@ export class WinnersService extends ServiceCreator {
         }
     }
 
-    public async getWinner(id: number): Promise<ICreateWinnerParams> {
+    private async getWinner(id: number): Promise<IResponseWinnerParams> {
         const errorMessage: string = "Fail winner creation";
         return await this.getByIdRequest(id, errorMessage);
     }
 
-    public async updateWinner(params: ICreateWinnerParams) {
+    private async updateWinner(params: IResponseWinnerParams) {
         const errorMessage: string = "Fail winner updating";
         const newBody: IUpdateWinnerParams = {
             wins: params.wins,
-            time: params.time,
+            time: parseFloat(params.time.toFixed(1)),
         };
         return await this.updateRequest(newBody, params.id, errorMessage);
     }

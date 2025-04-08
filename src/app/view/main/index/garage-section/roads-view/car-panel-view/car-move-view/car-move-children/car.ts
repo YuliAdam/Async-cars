@@ -35,4 +35,18 @@ export class Car extends BaseComponent {
     public setColor(color: string): void {
         if (this.svg) this.svg.setAttribute("fill", color);
     }
+
+    public setAnimationDuration(time: number) {
+        const carElement: HTMLElement | null = this.getElement();
+        if (carElement) {
+            carElement.style.animationDuration = `${time}ms`;
+        }
+    }
+
+    public setAnimationPlayState(state: "paused" | "running") {
+        const carElement: HTMLElement | null = this.getElement();
+        if (carElement) {
+            carElement.style.animationPlayState = state;
+        }
+    }
 }
