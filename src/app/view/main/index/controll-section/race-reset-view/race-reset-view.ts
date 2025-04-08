@@ -1,8 +1,7 @@
 import "./race-reset-view.css";
 import { IBaseComponentParam } from "../../../../../../util/base-component";
 import { View } from "../../../../view";
-import { RaceResetChildren } from "./button-children/button-children";
-import { ButtonComponent } from "../../../../../../util/components/button-component";
+import { RaceResetChildren } from "./button-children/button-children"
 import { Service } from "../../../../../service/service";
 import { GarageView } from "../../garage-section/garage-view";
 import { DialogView } from "./dialog-view/dialog-view";
