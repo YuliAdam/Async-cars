@@ -48,7 +48,7 @@ export class CreateFormView extends FormComponent {
         );
     }
 
-    private createChildrenComponents(
+    public createChildrenComponents(
         service: Service,
         garageSection: GarageView,
         paginationSection: PaginationView,

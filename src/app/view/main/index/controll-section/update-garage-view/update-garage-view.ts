@@ -2,7 +2,6 @@ import "./update-garage-view.css";
 import { IBaseComponentParam } from "../../../../../../util/base-component";
 import { View } from "../../../../view";
 import { CreateFormView } from "./form-creare/form-create";
-import { FormComponent } from "../../../../../../util/components/form-component";
 import { UpdateFormView } from "./form-update/form-update";
 import { CreateRandomView } from "./form-create-random/form-create-random";
 import { Service } from "../../../../../service/service";
@@ -16,6 +15,8 @@ const CssClasses: { updateWrap: string[] } = {
 
 export class UpdateGarageView extends View {
     public updateFormView: UpdateFormView;
+    public createFormView: CreateFormView;
+    public random: CreateRandomView;
     constructor(
         service: Service,
         garageSection: GarageView,
@@ -27,23 +28,25 @@ export class UpdateGarageView extends View {
         };
         super(updateGarageParam);
         this.updateFormView = this.createUpdateFormComponent(service);
-        this.configView(service, garageSection, paginationSection, indexView);
+        this.createFormView = this.createCreateFormComponent(
+            service,
+            garageSection,
+            paginationSection,
+            indexView
+        );
+        this.random = this.createRandomComponent(
+            service,
+            garageSection,
+            paginationSection,
+            indexView
+        );
+        this.configView();
     }
 
-    private configView(
-        service: Service,
-        garageSection: GarageView,
-        paginationSection: PaginationView,
-        indexView: IndexView
-    ) {
+    private configView() {
         this.viewComponent.appendChildComponents([
-            this.createRandomComponent(),
-            this.createCreateFormComponent(
-                service,
-                garageSection,
-                paginationSection,
-                indexView
-            ),
+            this.random,
+            this.createFormView,
             this.updateFormView,
         ]);
     }
@@ -53,7 +56,7 @@ export class UpdateGarageView extends View {
         garageSection: GarageView,
         paginationSection: PaginationView,
         indexView: IndexView
-    ): FormComponent {
+    ): CreateFormView {
         return new CreateFormView(
             service,
             garageSection,
@@ -66,7 +69,17 @@ export class UpdateGarageView extends View {
         return new UpdateFormView(service);
     }
 
-    private createRandomComponent(): FormComponent {
-        return new CreateRandomView();
+    private createRandomComponent(
+        service: Service,
+        garageSection: GarageView,
+        paginationSection: PaginationView,
+        indexView: IndexView
+    ): CreateRandomView {
+        return new CreateRandomView(
+            service,
+            garageSection,
+            paginationSection,
+            indexView
+        );
     }
 }
