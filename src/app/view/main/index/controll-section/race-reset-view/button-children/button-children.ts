@@ -12,6 +12,8 @@ import {
     IEngineDriveRespons,
     IEngineStartStop,
 } from "../../../../../../service/engine-service/engine-service";
+import { DialogView } from "../dialog-view/dialog-view";
+import { ICarParam } from "../../../../../../service/garage-service/garage-service";
 
 const CssClasses: { race: string[]; reset: string[] } = {
     race: ["controll_race"],
@@ -26,9 +28,17 @@ const buttonText: { RACE: string; RESET: string } = {
 export class RaceResetChildren extends ComponentChildren<ButtonComponent> {
     public raceButton: BaseComponent;
     public resetButton: BaseComponent;
-    constructor(service: Service, garageSection: GarageView) {
+    constructor(
+        service: Service,
+        garageSection: GarageView,
+        dialogComponent: DialogView
+    ) {
         super();
-        this.raceButton = this.createRaceButton(service, garageSection);
+        this.raceButton = this.createRaceButton(
+            service,
+            garageSection,
+            dialogComponent
+        );
         this.resetButton = this.createResetButton(service, garageSection);
         this.childArray.push(this.raceButton, this.resetButton);
     }
@@ -37,14 +47,18 @@ export class RaceResetChildren extends ComponentChildren<ButtonComponent> {
         return [];
     }
 
-    private createRaceButton(service: Service, garageSection: GarageView) {
+    private createRaceButton(
+        service: Service,
+        garageSection: GarageView,
+        dialogComponent: DialogView
+    ) {
         const raceButtonParam: IBaseComponentParam = {
             classList: CssClasses.race,
             textContent: buttonText.RACE,
         };
         const raceButton = new ButtonComponent(raceButtonParam);
         raceButton.addComponentEventListener("click", () =>
-            this.addRaceEvent(service, garageSection)
+            this.addRaceEvent(service, garageSection, dialogComponent)
         );
         return raceButton;
     }
@@ -60,13 +74,18 @@ export class RaceResetChildren extends ComponentChildren<ButtonComponent> {
         return resetButton;
     }
 
-    private async addRaceEvent(service: Service, garageSection: GarageView) {
+    private async addRaceEvent(
+        service: Service,
+        garageSection: GarageView,
+        dialogComponent: DialogView
+    ) {
         const params: IEngineStartStop[] = [];
         garageSection.garageRoad.carsParams.forEach((p) => {
             params.push({ id: p.id, status: ICarState.started });
         });
         const driveParams = await service.engineService.setStateAll(params);
         this.raceButton.setComponentAttribute("disabled", "true");
+        const timesArray: { id: number; time: number }[] = [];
         garageSection.garageRoad.carPanelViewArr.forEach(async (panel, i) => {
             const car = panel.moveComponent.car;
             await garageSection.garageRoad.carPanelViewArr[
@@ -76,6 +95,7 @@ export class RaceResetChildren extends ComponentChildren<ButtonComponent> {
             let time: number = 0;
             if (typeof promise !== "string") {
                 time = promise.distance / promise.velocity;
+                timesArray.push({ id: car.carParams.id, time: time / 1000 });
             }
             const carElement: HTMLElement | null = car.getElement();
             if (carElement) {
@@ -97,8 +117,54 @@ export class RaceResetChildren extends ComponentChildren<ButtonComponent> {
                 await service.engineService.drive(car.carParams.id);
             if (!driveResponse.success && carElement) {
                 carElement.style.animationPlayState = "paused";
+                timesArray.pop();
             }
         });
+        setTimeout(
+            async () => this.showWinner(timesArray, service, dialogComponent),
+            200
+        );
+    }
+
+    private async showWinner(
+        timesArray: { id: number; time: number }[],
+        service: Service,
+        dialogComponent: DialogView
+    ) {
+        console.log(timesArray);
+        const winnerResult = await this.getWinnerResult(timesArray, service);
+        console.log(winnerResult);
+        setTimeout(
+            () => this.openDialog(winnerResult, dialogComponent),
+            timesArray[timesArray.length - 1].time * 1000
+        );
+    }
+
+    private async getWinnerResult(
+        timesArray: { id: number; time: number }[],
+        service: Service
+    ): Promise<{ winnerParams: ICarParam; time: number }> {
+        timesArray.sort((a, b) => a.time - b.time);
+        const winner = timesArray[0];
+        const winnerParams: ICarParam = await service.garageService.getCar(
+            winner.id
+        );
+        return { winnerParams: winnerParams, time: winner.time };
+    }
+
+    private openDialog(
+        winnerParams: {
+            winnerParams: ICarParam;
+            time: number;
+        },
+        dialogComponent: DialogView
+    ) {
+        dialogComponent.setDialog(
+            winnerParams.winnerParams.name,
+            winnerParams.time
+        );
+        console.log(dialogComponent);
+        dialogComponent.showDialog();
     }
 
     private async addResetEvent(service: Service, garageSection: GarageView) {
