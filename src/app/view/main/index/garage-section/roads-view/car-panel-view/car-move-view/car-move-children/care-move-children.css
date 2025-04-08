@@ -6,7 +6,7 @@
     left: 100px;
 }
 
-.driveMood{
+.driveMood {
     animation-name: drive;
     animation-fill-mode: forwards;
 }
@@ -73,7 +73,8 @@
     0% {
         left: 100px;
     }
+
     100% {
-        left: calc(100% - 100px);
+        left: calc(100% - 120px);
     }
 }

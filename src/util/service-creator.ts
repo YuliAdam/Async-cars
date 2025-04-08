@@ -36,7 +36,13 @@ export class ServiceCreator {
             method: "DELETE",
         };
     }
-    protected addParamsToUrl(param: IGetGarageParams | IWinnersParams): string {
+    protected addParamsToUrl(
+        param:
+            | IGetGarageParams
+            | IWinnersParams
+            | IEngineStartStop
+            | IEngineDriveRequest
+    ): string {
         return this.url.concat(
             "?",
             Object.entries(param)

@@ -32,7 +32,7 @@ export class ControllView extends View {
             paginationSection,
             indexView
         );
-        this.raceResetView = this.createRaceResetWrap();
+        this.raceResetView = this.createRaceResetWrap(service, garageSection);
         this.configView();
     }
 
@@ -56,7 +56,10 @@ export class ControllView extends View {
             indexView
         );
     }
-    private createRaceResetWrap(): RaceResetView {
-        return new RaceResetView();
+    private createRaceResetWrap(
+        service: Service,
+        garageSection: GarageView
+    ): RaceResetView {
+        return new RaceResetView(service, garageSection);
     }
 }

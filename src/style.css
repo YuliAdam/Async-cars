@@ -71,3 +71,8 @@ body {
   opacity: 0.9;
   filter: blur(3px);
 }
+
+:disabled {
+  background: var(--grey);
+  opacity: 0.2;
+}

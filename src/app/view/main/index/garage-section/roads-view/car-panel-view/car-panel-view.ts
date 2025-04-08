@@ -49,4 +49,5 @@ export class CarPanelView extends View {
     ): CarMoveView {
         return new CarMoveView(service, carParams);
     }
+
 }

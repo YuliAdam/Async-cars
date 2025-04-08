@@ -15,34 +15,30 @@ const CssClasses: { carMove: string[] } = {
 };
 
 export class CarMoveView extends View {
-    private car: Car;
+    public car: Car;
+    public carController: CarMoveControllerView;
     constructor(service: Service, carParams: ICarParam) {
         const carMoveParam: IBaseComponentParam = {
             classList: CssClasses.carMove,
         };
         super(carMoveParam);
-        this.car = new Car(carParams.color);
-        this.configView(service);
+        this.car = new Car(carParams);
+        this.carController = new CarMoveControllerView(service, this.car);
+        this.configView();
     }
-    private configView(service: Service) {
+    private configView() {
         this.viewComponent.appendChildComponents(
-            this.getChildrenComponents(service)
+            this.getChildrenComponents()
         );
     }
-    private getChildrenComponents(
-        service: Service,
-    ): BaseComponent[] {
-        return [
-            new CarMoveControllerView(service, this.car).viewComponent,
-            this.car,
-            new Finish(),
-        ];
+    private getChildrenComponents(): BaseComponent[] {
+        return [this.carController.viewComponent, this.car, new Finish()];
     }
 
-    public setCarColor(color: string) {
+    public setCarColor(carParams: ICarParam) {
         const parent: HTMLElement | null = this.car.getParentComponent();
         const oldCar: HTMLElement | null = this.car.getElement();
-        const newCar: Car = new Car(color);
+        const newCar: Car = new Car(carParams);
         const newCarElement: HTMLElement | null = newCar.getElement();
         if (parent && oldCar && newCarElement) {
             this.car = newCar;

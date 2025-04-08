@@ -106,7 +106,7 @@ export class UpdateFormChildren extends ComponentChildren<
         carPanelView: CarPanelView
     ) {
         carPanelView.controllerComponent.setCarName(carParams.name);
-        carPanelView.moveComponent.setCarColor(carParams.color);
+        carPanelView.moveComponent.setCarColor(carParams);
     }
 
     private addChangeNameEvent() {

@@ -35,6 +35,8 @@ export class RoadRemoveComponent extends ButtonComponent {
             indexView.garageSection.garageHeader.changeCountCarNumber(
                 indexView.garageSection.garageHeader.carsNumber - 1
             );
+            indexView.garageSection.garageRoad.removeCarParams(carParams);
+            indexView.garageSection.garageRoad.removeCarPanelView(carPanelView);
             carPanelView.viewComponent.removeComponent();
             Promise.all([
                 await service.garageService.deleteCar(carParams.id),

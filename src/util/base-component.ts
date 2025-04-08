@@ -59,6 +59,12 @@ export class BaseComponent {
         }
     }
 
+    public removeComponentAttribute(attributeName: string) {
+        if (this.component) {
+            this.component.removeAttribute(attributeName);
+        }
+    }
+
     public addComponentEventListener(
         eventName: string,
         callback: (ev: Event) => void
@@ -99,7 +105,7 @@ export class BaseComponent {
     }
 
     public addClassIfHasNot(className: string): void {
-        if (this.component && !this.component.classList.contains(className)) {
+        if (this.component && !this.hasClass(className)) {
             this.component.classList.add(className);
         }
     }
@@ -107,6 +113,13 @@ export class BaseComponent {
         if (this.component) {
             this.component.classList.remove(className);
         }
+    }
+
+    public hasClass(className: string): boolean {
+        if (this.component) {
+            return this.component.classList.contains(className);
+        }
+        return false;
     }
 
     protected createBaseComponent(param: IBaseComponentParam): void {

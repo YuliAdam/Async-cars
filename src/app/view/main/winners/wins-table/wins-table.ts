@@ -99,7 +99,7 @@ export class WinnersTableView extends View {
         const td2: BaseComponent = new BaseComponent({
             tag: "td",
         });
-        const car: Car = new Car(carParams.color);
+        const car: Car = new Car(carParams);
         td2.appendChildComponents([car]);
         this.setCarClass(car);
         const td3: BaseComponent = new BaseComponent({

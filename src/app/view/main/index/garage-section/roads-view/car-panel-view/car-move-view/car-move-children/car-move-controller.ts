@@ -4,6 +4,12 @@ import { ButtonComponent } from "../../../../../../../../../util/components/butt
 import { Service } from "../../../../../../../../service/service";
 import { View } from "../../../../../../../view";
 import { Car } from "./car";
+import {
+    ICarState,
+    IEngineDriveRespons,
+    IEngineResponse,
+    IEngineStartStop,
+} from "../../../../../../../../service/engine-service/engine-service";
 
 const CssClasses: {
     moveController: string[];
@@ -12,7 +18,7 @@ const CssClasses: {
 } = {
     moveController: ["car-move_controller"],
     start: ["controller_start"],
-    stop: ["controller_stop", "opacity"],
+    stop: ["controller_stop"],
 };
 
 const START_BUTTON_TEXT: string = "A";
@@ -28,14 +34,13 @@ export class CarMoveControllerView extends View {
         super(moveControllerParam);
         this.startButton = this.createStartButtonComponent(service, car);
         this.stopButton = this.createStopButtonComponent(service, car);
-        this.configView(service, car);
+        this.configView();
     }
-    private configView(service: Service, car: Car) {
+    private configView() {
         this.viewComponent.appendChildComponents([
             this.startButton,
             this.stopButton,
         ]);
-        console.log(service, car);
     }
     private createStartButtonComponent(
         service: Service,
@@ -67,22 +72,40 @@ export class CarMoveControllerView extends View {
         return stopButton;
     }
 
-    public addStartEvent(service: Service, car: Car) {
+    public async addStartEvent(service: Service, car: Car) {
+        const params: IEngineStartStop = {
+            id: car.carParams.id,
+            status: ICarState.started,
+        };
+        const driveParams: IEngineResponse =
+            await service.engineService.setState(params);
         car.addClassIfHasNot("driveMood");
+        const time: number = driveParams.distance / driveParams.velocity;
         const carElement: HTMLElement | null = car.getElement();
         if (carElement) {
-            carElement.style.animationDuration = "5s";
+            carElement.style.animationDuration = `${time}ms`;
         }
-        this.startButton.addClassIfHasNot("opacity");
-        this.stopButton.removeClass("opacity");
-        console.log(service);
+        this.startButton.setComponentAttribute("disabled", "true");
+        const driveResponse: IEngineDriveRespons =
+            await service.engineService.drive(car.carParams.id);
+        if (!driveResponse.success && carElement) {
+            carElement.style.animationPlayState = "paused";
+        }
     }
 
-    public addStopEvent(service: Service, car: Car) {
-        car.removeClass("driveMood");
-        this.startButton.removeClass("opacity");
-        this.stopButton.addClassIfHasNot("opacity");
-
-        console.log(service);
+    public async addStopEvent(service: Service, car: Car) {
+        const params: IEngineStartStop = {
+            id: car.carParams.id,
+            status: ICarState.stopped,
+        };
+        if (car.hasClass("driveMood")) {
+            await service.engineService.setState(params);
+            car.removeClass("driveMood");
+            this.startButton.removeComponentAttribute("disabled");
+            const carElement: HTMLElement | null = car.getElement();
+            if (carElement) {
+                carElement.style.animationPlayState = "running";
+            }
+        }
     }
 }

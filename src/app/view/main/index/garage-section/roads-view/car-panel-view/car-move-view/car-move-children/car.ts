@@ -2,6 +2,7 @@ import {
     BaseComponent,
     IBaseComponentParam,
 } from "../../../../../../../../../util/base-component";
+import { ICarParam } from "../../../../../../../../service/garage-service/garage-service";
 import { svg } from "./car-path-arr";
 
 const CssClasses: { car: string[] } = {
@@ -10,13 +11,15 @@ const CssClasses: { car: string[] } = {
 
 export class Car extends BaseComponent {
     private svg: Element | null;
-    constructor(color: string) {
+    public carParams: ICarParam;
+    constructor(params: ICarParam) {
         const carParam: IBaseComponentParam = {
             classList: CssClasses.car,
         };
         super(carParam);
         this.svg = this.createCarSvg();
-        this.setColor(color);
+        this.carParams = params;
+        this.setColor(params.color);
     }
 
     public createCarSvg(): Element | null {

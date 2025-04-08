@@ -11,7 +11,7 @@ export interface IEngineResponse {
 }
 export interface IEngineStartStop {
     id: number;
-    state: ICarState;
+    status: ICarState;
 }
 
 export interface IEngineDriveRespons {
@@ -19,7 +19,7 @@ export interface IEngineDriveRespons {
 }
 export interface IEngineDriveRequest {
     id: number;
-    state: "drive";
+    status: "drive";
 }
 
 export class EngineService extends ServiceCreator {
@@ -30,22 +30,54 @@ export class EngineService extends ServiceCreator {
     public async setState(params: IEngineStartStop): Promise<IEngineResponse> {
         const errorMessage: string = "Fail state setting";
         const method: string = "PATCH";
-        this.setBodyRequestParams(this.stringifyBody(params));
         this.setMethod(method);
-        return await fetch(`${this.url}/${params.id}`, this.requestParams)
+        return await fetch(
+            this.addParamsToUrl({ id: params.id, status: params.status }),
+            this.requestParams
+        )
             .then((response) => response.json())
             .catch((e) => this.createErrorMessage(e, errorMessage));
     }
 
-    public async drive(
-        params: IEngineDriveRequest
-    ): Promise<IEngineDriveRespons> {
+    public async setStateAll(params: IEngineStartStop[]) {
+        const errorMessage: string = "Fail state setting";
+        const method: string = "PATCH";
+        this.setMethod(method);
+        let responseArr: Promise<IEngineResponse>[] = [];
+        let request: Promise<Response>[] = [];
+        params.forEach((el) => {
+            request.push(
+                fetch(
+                    this.addParamsToUrl({ id: el.id, status: el.status }),
+                    this.requestParams
+                )
+            );
+        });
+        return await Promise.all(request)
+            .then((response) => {
+                response.forEach((r) => responseArr.push(r.json()));
+                return responseArr;
+            })
+            .catch((e) => this.createErrorMessage(e, errorMessage));
+    }
+
+    public async drive(id: number): Promise<IEngineDriveRespons> {
         const errorMessage: string = "Fail drive";
         const method: string = "PATCH";
-        this.setBodyRequestParams(this.stringifyBody(params));
         this.setMethod(method);
-        return await fetch(`${this.url}/${params.id}`, this.requestParams)
-            .then((response) => response.json())
+        return await fetch(
+            this.addParamsToUrl({ id: id, status: "drive" }),
+            this.requestParams
+        )
+            .then((response) => {
+                if (!response.ok && response.status === 500) {
+                    console.log(
+                        "Car has been stopped suddenly. It's engine was broken down."
+                    );
+                    return { success: false };
+                }
+                return response.json();
+            })
             .catch((e) => this.createErrorMessage(e, errorMessage));
     }
 }

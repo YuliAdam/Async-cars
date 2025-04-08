@@ -19,11 +19,15 @@ const CssClasses: { road: string[] } = {
 export const CARS_LIMIT: number = 7;
 
 export class GarageRoadView extends View {
+    public carsParams: ICarParam[];
+    public carPanelViewArr: CarPanelView[];
     constructor(service: Service, page: number, indexView: IndexView) {
         const garageRoad: IBaseComponentParam = {
             classList: CssClasses.road,
         };
         super(garageRoad);
+        this.carsParams = [];
+        this.carPanelViewArr = [];
         this.configView(service, page, indexView);
     }
 
@@ -32,16 +36,19 @@ export class GarageRoadView extends View {
         carParams: ICarParam,
         indexView: IndexView
     ) {
-        this.viewComponent.prependChildComponents([
-            new CarPanelView(service, carParams, indexView).viewComponent,
-        ]);
+        const newCarPanel = new CarPanelView(service, carParams, indexView);
+        this.viewComponent.prependChildComponents([newCarPanel.viewComponent]);
         const garageRoadEl: HTMLElement | null =
             this.viewComponent.getElement();
         if (garageRoadEl) {
             if (garageRoadEl.children.length > CARS_LIMIT) {
+                this.carsParams.pop();
+                this.carPanelViewArr.pop();
                 garageRoadEl.removeChild(garageRoadEl.children[7]);
             }
         }
+        this.carPanelViewArr.push(newCarPanel);
+        this.carsParams.push(carParams);
     }
 
     private async configView(
@@ -60,12 +67,16 @@ export class GarageRoadView extends View {
         indexView: IndexView
     ): Promise<BaseComponent[]> {
         const childArr: BaseComponent[] = [];
-        const carParams = await this.getCarsParams(service, page);
-        const count: number = carParams.length;
+        this.carsParams = await this.getCarsParams(service, page);
+        const count: number = this.carsParams.length;
         for (let i = 0; i < count; i++) {
-            childArr.push(
-                new CarPanelView(service, carParams[i], indexView).viewComponent
+            const newCarPanel = new CarPanelView(
+                service,
+                this.carsParams[i],
+                indexView
             );
+            this.carPanelViewArr.push(newCarPanel);
+            childArr.push(newCarPanel.viewComponent);
         }
         return childArr;
     }
@@ -76,5 +87,13 @@ export class GarageRoadView extends View {
     ): Promise<ICarParam[]> {
         const param: IGetGarageParams = { _limit: CARS_LIMIT, _page: page };
         return await service.garageService.getGarage(param);
+    }
+
+    public removeCarParams(carParams: ICarParam) {
+        this.carsParams.splice(this.carsParams.indexOf(carParams), 1);
+    }
+
+    public removeCarPanelView(carPanel: CarPanelView) {
+        this.carPanelViewArr.splice(this.carPanelViewArr.indexOf(carPanel), 1);
     }
 }

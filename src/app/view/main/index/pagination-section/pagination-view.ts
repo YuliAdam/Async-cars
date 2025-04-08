@@ -67,8 +67,7 @@ export class PaginationView extends View {
         });
 
         const FIRST_PAGE_NUMBER = 1;
-        console.log( await this.hasNextPage(service, FIRST_PAGE_NUMBER));
-        if ( await this.hasNextPage(service, FIRST_PAGE_NUMBER)) {
+        if (await this.hasNextPage(service, FIRST_PAGE_NUMBER)) {
             divNext.appendChildComponents([
                 this.nextButton,
                 InActivOverComponent,
