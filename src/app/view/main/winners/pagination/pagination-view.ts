@@ -7,6 +7,7 @@ import { ButtonComponent } from "../../../../../util/components/button-component
 import { Service } from "../../../../service/service";
 import { View } from "../../../view";
 import { WinnersView } from "../winners-view";
+import { IPaginationDirection } from "../../index/pagination-section/pagination-view";
 
 const CssClasses: {
     pagination: string[];
@@ -22,10 +23,6 @@ const CssClasses: {
     relativDiv: ["relativ-div"],
 };
 
-export enum IPaginationDirection {
-    next = 1,
-    prev = -1,
-}
 
 const PREV_BUTTON_TEXT: string = "Prev";
 const NEXT_BUTTON_TEXT: string = "Next";
