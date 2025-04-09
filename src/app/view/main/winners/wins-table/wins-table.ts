@@ -69,7 +69,7 @@ export class WinnersTableView extends View {
                 await this.getRowWithData(
                     service,
                     winnersParam[i],
-                    headerComponent.pageNumber * 10 + i + 1
+                    (headerComponent.pageNumber-1) * 10 + i + 1
                 )
             );
             tbody.appendChildComponents([tr]);
