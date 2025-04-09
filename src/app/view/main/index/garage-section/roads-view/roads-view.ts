@@ -37,7 +37,7 @@ export class GarageRoadView extends View {
         indexView: IndexView
     ) {
         const newCarPanel = new CarPanelView(service, carParams, indexView);
-        this.viewComponent.prependChildComponents([newCarPanel.viewComponent]);
+        this.viewComponent.appendChildComponents([newCarPanel.viewComponent]);
         const garageRoadEl: HTMLElement | null =
             this.viewComponent.getElement();
         if (garageRoadEl) {

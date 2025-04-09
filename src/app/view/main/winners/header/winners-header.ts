@@ -1,4 +1,4 @@
-import './winner-headers.css'
+import "./winner-headers.css";
 import {
     BaseComponent,
     IBaseComponentParam,
@@ -17,7 +17,7 @@ export class WinnersHeaderView extends View {
     public pageNumber: number;
     private totalWinsCounComponent: BaseComponent;
     private pageNumberComponent: BaseComponent;
-    public winsNumber: number;
+    public totalWinsNumber: number;
     constructor(service: Service) {
         const winnersHeaderParam: IBaseComponentParam = {
             tag: "header",
@@ -25,7 +25,7 @@ export class WinnersHeaderView extends View {
         };
         super(winnersHeaderParam);
         this.pageNumber = 1;
-        this.winsNumber = 0;
+        this.totalWinsNumber = 0;
         this.totalWinsCounComponent = new BaseComponent();
         this.pageNumberComponent = this.createPageNumberComponent();
         this.configView(service);
@@ -51,9 +51,11 @@ export class WinnersHeaderView extends View {
     }
 
     private async createTotalCountComponent(service: Service) {
-        this.winsNumber = parseInt((await this.getTotalCount(service)) ?? "");
+        this.totalWinsNumber = parseInt(
+            (await this.getTotalCount(service)) ?? ""
+        );
         return this.createTextComponent(
-            `Winners(${this.winsNumber})`,
+            `Winners(${this.totalWinsNumber})`,
             CssClasses.winsCount
         );
     }
@@ -69,7 +71,7 @@ export class WinnersHeaderView extends View {
         const winsNumberStr: string | null =
             await service.winnersService.getWinnersTotalCount();
         if (winsNumberStr) {
-            this.winsNumber = parseInt(winsNumberStr) + 1;
+            this.totalWinsNumber = parseInt(winsNumberStr) + 1;
         }
         return winsNumberStr;
     }

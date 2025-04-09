@@ -32,9 +32,11 @@ export interface IUpdateWinnerParams {
 
 export class WinnersService extends ServiceCreator {
     public winnersId: number[];
+    public winnersCount: number;
     constructor(url: string) {
         super(url);
         this.winnersId = [];
+        this.winnersCount = 0;
         this.setAllWinnersId();
     }
 
@@ -68,6 +70,7 @@ export class WinnersService extends ServiceCreator {
     public async createWinner(params: ICreateWinnerParams) {
         const errorMessage: string = "Fail winner creation";
         if (!this.winnersId.includes(params.id)) {
+            this.winnersCount++;
             this.winnersId.push(params.id);
             const newWinnerParams: IResponseWinnerParams = {
                 id: params.id,
@@ -77,6 +80,7 @@ export class WinnersService extends ServiceCreator {
             return await this.createRequest(newWinnerParams, errorMessage);
         } else {
             const winnerParams = await this.getWinner(params.id);
+            console.log(winnerParams);
             const newWinsNum: number = winnerParams.wins + 1;
             let time: number = winnerParams.time;
             if (time > params.time) {
@@ -92,6 +96,7 @@ export class WinnersService extends ServiceCreator {
     }
 
     public async deleteWinner(id: number) {
+        this.winnersCount--;
         const errorMessage: string = "Fail winner deleting";
         if (this.winnersId.includes(id)) {
             this.winnersId.splice(this.winnersId.indexOf(id), 1);

@@ -4,6 +4,7 @@ import { Service } from "../../../service/service";
 import { View } from "../../view";
 import { WinnersHeaderView } from "./header/winners-header";
 import { WinnersTableView } from "./wins-table/wins-table";
+import { PaginationView } from "./pagination/pagination-view";
 
 const CssClasses: { winners: string[] } = {
     winners: ["main_winners"],
@@ -12,6 +13,7 @@ const CssClasses: { winners: string[] } = {
 export class WinnersView extends View {
     public headerComponent: WinnersHeaderView;
     public tableComponent: WinnersTableView;
+    public paginationComponent: PaginationView;
     constructor(service: Service) {
         const winnersParam: IBaseComponentParam = {
             classList: CssClasses.winners,
@@ -19,12 +21,14 @@ export class WinnersView extends View {
         super(winnersParam);
         this.headerComponent = this.getHeaderComponent(service);
         this.tableComponent = this.getTableComponent(service);
+        this.paginationComponent = this.getPaginationView(service, this);
         this.configView();
     }
     private configView() {
         this.viewComponent.appendChildComponents([
             this.headerComponent.viewComponent,
             this.tableComponent.viewComponent,
+            this.paginationComponent.viewComponent,
         ]);
     }
 
@@ -34,5 +38,8 @@ export class WinnersView extends View {
 
     private getTableComponent(service: Service): WinnersTableView {
         return new WinnersTableView(service, this.headerComponent);
+    }
+    private getPaginationView(service: Service, winnerView: WinnersView) {
+        return new PaginationView(service, winnerView);
     }
 }

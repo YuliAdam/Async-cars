@@ -1,0 +1,5 @@
+.winners_pagination {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}

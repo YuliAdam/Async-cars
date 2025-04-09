@@ -30,7 +30,7 @@ export class WinnersTableView extends View {
         this.configView(service, headerComponent);
     }
 
-    private async configView(
+    public async configView(
         service: Service,
         headerComponent: WinnersHeaderView
     ) {
@@ -61,8 +61,9 @@ export class WinnersTableView extends View {
             service,
             headerComponent
         );
+        const count = winnersParam.length;
         const tbody: BaseComponent = new BaseComponent({ tag: "tbody" });
-        for (let i = 0; i < headerComponent.winsNumber; i++) {
+        for (let i = 0; i < count; i++) {
             const tr: BaseComponent = new BaseComponent({ tag: "tr" });
             tr.appendChildComponents(
                 await this.getRowWithData(service, winnersParam[i], i + 1)
@@ -77,6 +78,7 @@ export class WinnersTableView extends View {
         headerComponent: WinnersHeaderView
     ): Promise<IResponseWinnerParams[]> {
         const page = headerComponent.pageNumber;
+        console.log(page);
         return await service.winnersService.getWinners({
             _page: page,
             _limit: WINS_LIMIT,
@@ -88,10 +90,13 @@ export class WinnersTableView extends View {
         winsParams: IResponseWinnerParams,
         rowNum: number
     ): Promise<BaseComponent[]> {
+        console.log(winsParams);
         const carParams: ICarParam = await this.getCarParams(
             service,
             winsParams.id
         );
+
+        console.log(carParams);
         const td1: BaseComponent = new BaseComponent({
             tag: "td",
             textContent: `${rowNum}`,
