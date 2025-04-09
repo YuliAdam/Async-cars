@@ -66,7 +66,11 @@ export class WinnersTableView extends View {
         for (let i = 0; i < count; i++) {
             const tr: BaseComponent = new BaseComponent({ tag: "tr" });
             tr.appendChildComponents(
-                await this.getRowWithData(service, winnersParam[i], i + 1)
+                await this.getRowWithData(
+                    service,
+                    winnersParam[i],
+                    headerComponent.pageNumber * 10 + i + 1
+                )
             );
             tbody.appendChildComponents([tr]);
         }
