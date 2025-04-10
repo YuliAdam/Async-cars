@@ -32,6 +32,7 @@ export class WinnersTableView extends View {
     public tableBody: BaseComponent;
     private pageNumber: number;
     private order: IOrderOption;
+    private sortParam: ISortOption;
     constructor(service: Service, headerComponent: WinnersHeaderView) {
         const tableParams: IBaseComponentParam = {
             tag: "table",
@@ -41,6 +42,7 @@ export class WinnersTableView extends View {
         this.tableBody = new BaseComponent();
         this.pageNumber = 0;
         this.order = IOrderOption.ASC;
+        this.sortParam = ISortOption.id;
         this.configView(service, headerComponent);
     }
 
@@ -53,7 +55,7 @@ export class WinnersTableView extends View {
             _page: this.pageNumber,
             _limit: WINS_LIMIT,
             _order: this.order,
-            _sort: ISortOption.id,
+            _sort: this.sortParam,
         };
         this.tableBody = await this.createTableBody(service, getWinnerParams);
         this.viewComponent.appendChildComponents([
@@ -115,11 +117,12 @@ export class WinnersTableView extends View {
         } else {
             this.order = IOrderOption.ASC;
         }
+        this.sortParam = sortParam;
         const getSortingParams: IWinnersParams = {
             _page: this.pageNumber,
             _limit: WINS_LIMIT,
             _order: this.order,
-            _sort: sortParam,
+            _sort: this.sortParam,
         };
         await this.replaceBody(service, getSortingParams);
     }
