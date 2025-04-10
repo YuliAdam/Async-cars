@@ -178,6 +178,6 @@ export class PaginationView extends View {
         service.winnersService.winnersCount = parseInt(
             (await service.winnersService.getWinnersTotalCount()) ?? ""
         );
-        return page * WINNERS_LIMIT < service.garageService.carsNumber;
+        return page * WINNERS_LIMIT < service.winnersService.winnersCount;
     }
 }
