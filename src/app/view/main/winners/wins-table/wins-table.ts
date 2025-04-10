@@ -69,7 +69,6 @@ export class WinnersTableView extends View {
         const tr: BaseComponent = new BaseComponent({ tag: "tr" });
         const SORTING_COLUMN_INDEX: number[] = [3, 4];
         const SORTING_PARAMS: ISortOption[] = [
-            ISortOption.id,
             ISortOption.wins,
             ISortOption.time,
         ];
