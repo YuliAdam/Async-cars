@@ -49,7 +49,18 @@
         font-size: 13.5px;
     }
 }
-.table_car{
+
+.table_car {
     width: 100%;
     height: auto;
+}
+
+.table_sort {
+    width: 10px;
+    margin: 0 5px;
+}
+
+.table_sort:hover {
+    cursor: pointer;
+    box-shadow: var(--box-shadow-black);
 }

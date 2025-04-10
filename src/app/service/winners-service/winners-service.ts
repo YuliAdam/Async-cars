@@ -1,12 +1,13 @@
 import { ServiceCreator } from "../../../util/service-creator";
 
-enum IOrderOption {
+export enum IOrderOption {
     ASC = "ASC",
     DESC = "DESC",
 }
-enum ISortOption {
+export enum ISortOption {
     id = "id",
-    name = "name",
+    wins = "wins",
+    time = "time",
 }
 
 export interface IWinnersParams {

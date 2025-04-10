@@ -6,12 +6,22 @@ import {
 import { Service } from "../../../../service/service";
 import { View } from "../../../view";
 import { WinnersHeaderView } from "../header/winners-header";
-import { IResponseWinnerParams } from "../../../../service/winners-service/winners-service";
+import {
+    IOrderOption,
+    IResponseWinnerParams,
+    ISortOption,
+    IWinnersParams,
+} from "../../../../service/winners-service/winners-service";
 import { ICarParam } from "../../../../service/garage-service/garage-service";
 import { Car } from "../../index/garage-section/roads-view/car-panel-view/car-move-view/car-move-children/car";
+import {
+    IImgParam,
+    ImgComponent,
+} from "../../../../../util/components/img-component";
 
-const CssClasses: { table: string[]; car: string } = {
+const CssClasses: { table: string[]; sort: string[]; car: string } = {
     table: ["winners_table"],
+    sort: ["table_sort"],
     car: "table_car",
 };
 
@@ -20,6 +30,8 @@ const WINS_LIMIT: number = 10;
 
 export class WinnersTableView extends View {
     public tableBody: BaseComponent;
+    private pageNumber: number;
+    private order: IOrderOption;
     constructor(service: Service, headerComponent: WinnersHeaderView) {
         const tableParams: IBaseComponentParam = {
             tag: "table",
@@ -27,6 +39,8 @@ export class WinnersTableView extends View {
         };
         super(tableParams);
         this.tableBody = new BaseComponent();
+        this.pageNumber = 0;
+        this.order = IOrderOption.ASC;
         this.configView(service, headerComponent);
     }
 
@@ -34,32 +48,89 @@ export class WinnersTableView extends View {
         service: Service,
         headerComponent: WinnersHeaderView
     ) {
-        this.tableBody = await this.createTableBody(service, headerComponent);
+        this.pageNumber = headerComponent.pageNumber;
+        const getWinnerParams: IWinnersParams = {
+            _page: this.pageNumber,
+            _limit: WINS_LIMIT,
+            _order: this.order,
+            _sort: ISortOption.id,
+        };
+        this.tableBody = await this.createTableBody(service, getWinnerParams);
         this.viewComponent.appendChildComponents([
-            this.createTableHeader(),
+            this.createTableHeader(service),
             this.tableBody,
         ]);
     }
 
-    private createTableHeader(): BaseComponent {
+    private createTableHeader(service: Service): BaseComponent {
         const thead: BaseComponent = new BaseComponent({ tag: "thead" });
         const tr: BaseComponent = new BaseComponent({ tag: "tr" });
-        HEADERS.forEach((el) =>
-            tr.appendChildComponents([
-                new BaseComponent({ tag: "th", textContent: el }),
-            ])
-        );
+        const SORTING_COLUMN_INDEX: number[] = [0, 3, 4];
+        const SORTING_PARAMS: ISortOption[] = [
+            ISortOption.id,
+            ISortOption.wins,
+            ISortOption.time,
+        ];
+        HEADERS.forEach((el, i) => {
+            const cell: BaseComponent = new BaseComponent({
+                tag: "th",
+                textContent: el,
+            });
+            if (SORTING_COLUMN_INDEX.includes(i)) {
+                cell.appendChildComponents([
+                    this.createSortImage(
+                        SORTING_PARAMS[SORTING_COLUMN_INDEX.indexOf(i)],
+                        service
+                    ),
+                ]);
+            }
+            tr.appendChildComponents([cell]);
+        });
         thead.appendChildComponents([tr]);
         return thead;
     }
 
+    private createSortImage(sortParam: ISortOption, service: Service) {
+        const sortImgBaseParam: IBaseComponentParam = {
+            tag: "img",
+            classList: CssClasses.sort,
+        };
+        const imgParam: IImgParam = {
+            src: "sort.svg",
+            alt: "sort img",
+        };
+        const imgComponent: ImgComponent = new ImgComponent(
+            sortImgBaseParam,
+            imgParam
+        );
+        imgComponent.addComponentEventListener("click", () =>
+            this.sortingEvent(sortParam, service)
+        );
+        return imgComponent;
+    }
+
+    private async sortingEvent(sortParam: ISortOption, service: Service) {
+        if (this.order === IOrderOption.ASC) {
+            this.order = IOrderOption.DESC;
+        } else {
+            this.order = IOrderOption.ASC;
+        }
+        const getSortingParams: IWinnersParams = {
+            _page: this.pageNumber,
+            _limit: WINS_LIMIT,
+            _order: this.order,
+            _sort: sortParam,
+        };
+        await this.replaceBody(service, getSortingParams);
+    }
+
     private async createTableBody(
         service: Service,
-        headerComponent: WinnersHeaderView
+        getWinnersParams: IWinnersParams
     ): Promise<BaseComponent> {
         const winnersParam: IResponseWinnerParams[] = await this.getWinners(
             service,
-            headerComponent
+            getWinnersParams
         );
         const count = winnersParam.length;
         const tbody: BaseComponent = new BaseComponent({ tag: "tbody" });
@@ -69,7 +140,7 @@ export class WinnersTableView extends View {
                 await this.getRowWithData(
                     service,
                     winnersParam[i],
-                    (headerComponent.pageNumber-1) * 10 + i + 1
+                    (this.pageNumber - 1) * 10 + i + 1
                 )
             );
             tbody.appendChildComponents([tr]);
@@ -77,16 +148,26 @@ export class WinnersTableView extends View {
         return tbody;
     }
 
+    private async replaceBody(
+        service: Service,
+        getWinnersParams: IWinnersParams
+    ) {
+        console.log(getWinnersParams);
+        const newBody = (
+            await this.createTableBody(service, getWinnersParams)
+        ).getElement();
+        const tableElement: HTMLElement | null =
+            this.viewComponent.getElement();
+        if (tableElement && newBody) {
+            tableElement.replaceChild(newBody, tableElement.children[1]);
+        }
+    }
+
     private async getWinners(
         service: Service,
-        headerComponent: WinnersHeaderView
+        getWinnersParams: IWinnersParams
     ): Promise<IResponseWinnerParams[]> {
-        const page = headerComponent.pageNumber;
-        console.log(page);
-        return await service.winnersService.getWinners({
-            _page: page,
-            _limit: WINS_LIMIT,
-        });
+        return await service.winnersService.getWinners(getWinnersParams);
     }
 
     private async getRowWithData(
@@ -94,13 +175,10 @@ export class WinnersTableView extends View {
         winsParams: IResponseWinnerParams,
         rowNum: number
     ): Promise<BaseComponent[]> {
-        console.log(winsParams);
         const carParams: ICarParam = await this.getCarParams(
             service,
             winsParams.id
         );
-
-        console.log(carParams);
         const td1: BaseComponent = new BaseComponent({
             tag: "td",
             textContent: `${rowNum}`,

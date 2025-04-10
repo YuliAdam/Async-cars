@@ -10,6 +10,7 @@
   --text-color-black: var(--primary-color-black);
   --box-shadow: rgba(251, 255, 0, 0.4) -5px 5px, rgba(251, 255, 0, 0.3) -10px 10px, rgba(251, 255, 0, 0.2) -15px 15px, rgba(251, 255, 0, 0.1) -20px 20px, rgba(251, 255, 0, 0.05) -25px 25px;
   --box-shadow-yellow: var(--yellow) 0px 5px 15px;
+  --box-shadow-black: var(--primary-color-black) 0px 5px 15px;
   --section-border: 2px solid var(--text-color);
   --title-font: Inter, Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
   --border-btn: 2px solid var(--primary-color-dark);
