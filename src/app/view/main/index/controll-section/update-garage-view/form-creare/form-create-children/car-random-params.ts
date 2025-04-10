@@ -33,7 +33,7 @@ export function getRandomCarsArr(): ICreateCarParams[] {
         const carModel = model[getRandom(0, model.length)];
         const carColor = getRandomColor();
         const carParams: ICreateCarParams = {
-            name: randomName + carModel,
+            name: randomName + "" + carModel,
             color: carColor,
         };
         if (

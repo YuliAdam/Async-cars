@@ -67,7 +67,7 @@ export class WinnersTableView extends View {
     private createTableHeader(service: Service): BaseComponent {
         const thead: BaseComponent = new BaseComponent({ tag: "thead" });
         const tr: BaseComponent = new BaseComponent({ tag: "tr" });
-        const SORTING_COLUMN_INDEX: number[] = [0, 3, 4];
+        const SORTING_COLUMN_INDEX: number[] = [3, 4];
         const SORTING_PARAMS: ISortOption[] = [
             ISortOption.id,
             ISortOption.wins,
