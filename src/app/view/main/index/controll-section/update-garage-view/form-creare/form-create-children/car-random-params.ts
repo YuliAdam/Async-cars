@@ -4,7 +4,7 @@ import { ICreateCarParams } from "../../../../../../../service/garage-service/ga
 const carsName: string[] = [
     "Ford",
     "Tesla",
-    "fiat",
+    "Fiat",
     "Jeep",
     "Mercedes",
     "BMV",
@@ -15,7 +15,18 @@ const carsName: string[] = [
     "Land Rover",
     "Audi",
 ];
-const model: string[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+const model: string[] = [
+    "Blazer",
+    "Bronco Sport",
+    "Camry Hybrid",
+    "E-PACE",
+    "Electrified G80",
+    "Prius Prime",
+    "Q3",
+    "S90",
+    "Taycan",
+    "2 Series",
+];
 
 function getRandomColor() {
     const letters = "0123456789ABCDEF";
